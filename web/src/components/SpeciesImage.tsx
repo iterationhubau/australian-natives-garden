@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { GenusIllustration } from './GenusIllustration'
+import { assetUrl } from '../lib/assetUrl'
 
 type Props = {
   imageUrl?: string
@@ -13,7 +14,10 @@ type Props = {
 function normalizeSrc(url: string): string {
   const src = url.trim()
   if (!src) return ''
-  if (src.startsWith('/')) return src
+  // App-relative (e.g. /catalog/images/114.jpg) — honor Vite base for GitHub Pages
+  if (src.startsWith('/') && !src.startsWith('//')) {
+    return assetUrl(src)
+  }
   try {
     const u = new URL(src)
     // Wikimedia thumb URLs work more reliably without campaign query params
@@ -25,7 +29,7 @@ function normalizeSrc(url: string): string {
   } catch {
     /* keep raw */
   }
-  return src
+  return assetUrl(src)
 }
 
 export function SpeciesImage({ imageUrl, genus, alt = '', className = '', contain = false }: Props) {
