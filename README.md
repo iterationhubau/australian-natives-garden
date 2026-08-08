@@ -12,3 +12,9 @@ cd web
 npm install
 npm run dev
 ```
+
+## GitHub Pages
+
+Pushing to `main` builds and deploys the app via GitHub Actions.
+
+Live site: https://iterationhubau.github.io/australian-natives-garden/

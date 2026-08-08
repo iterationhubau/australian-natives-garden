@@ -1,9 +1,15 @@
+import { copyFileSync, existsSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+/** Set VITE_BASE=/australian-natives-garden/ for GitHub Pages project sites. */
+const base = process.env.VITE_BASE || '/'
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     tailwindcss(),
@@ -17,7 +23,8 @@ export default defineConfig({
         theme_color: '#064e3b',
         background_color: '#f8fafc',
         display: 'standalone',
-        start_url: '/',
+        start_url: base,
+        scope: base,
         icons: [
           {
             src: 'pwa-192.png',
@@ -32,5 +39,13 @@ export default defineConfig({
         ],
       },
     }),
+    {
+      name: 'spa-github-pages-fallback',
+      closeBundle() {
+        const index = resolve(__dirname, 'dist/index.html')
+        const fallback = resolve(__dirname, 'dist/404.html')
+        if (existsSync(index)) copyFileSync(index, fallback)
+      },
+    },
   ],
 })
