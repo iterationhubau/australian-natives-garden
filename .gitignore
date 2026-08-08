@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+web/node_modules/
+
+# Build / cache
+web/dist/
+web/dev-dist/
+web/.vite/
+*.local
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+web/.env
+web/.env.*
+!web/.env.example
+
+# Logs & OS
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Tooling reports (local)
+web/scripts/image-fetch-report.json
+web/scripts/image-relocalize-report.json
+
+# Optional local dumps
+*.log
+.turbo/
+coverage/
