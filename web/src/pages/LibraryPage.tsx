@@ -23,6 +23,7 @@ const GENERA = [
   'Grevillea',
   'Hakea',
   'Hardenbergia',
+  'Isopogon',
   'Lomandra',
   'Melaleuca',
   'Westringia',

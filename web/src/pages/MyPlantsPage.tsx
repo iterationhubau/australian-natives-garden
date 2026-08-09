@@ -224,13 +224,17 @@ export function MyPlantsPage() {
                         <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 font-semibold capitalize">{plant.source}</span>
                       </td>
                       <td className="px-2 py-2.5 text-center" onClick={(e) => e.stopPropagation()}>
-                        <select
-                          value={plant.germ_status}
-                          onChange={(e) => void api.updatePlant(plant.id, { germ_status: e.target.value as GermStatus }).then(refresh)}
-                          className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1"
-                        >
-                          {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
-                        </select>
+                        {plant.source === 'purchase' ? (
+                          <span className="text-xs text-slate-400 font-medium">N/A</span>
+                        ) : (
+                          <select
+                            value={plant.germ_status}
+                            onChange={(e) => void api.updatePlant(plant.id, { germ_status: e.target.value as GermStatus }).then(refresh)}
+                            className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1"
+                          >
+                            {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                          </select>
+                        )}
                       </td>
                       <td className="px-2 py-2.5 text-center" onClick={(e) => e.stopPropagation()}>
                         <button

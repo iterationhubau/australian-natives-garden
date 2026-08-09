@@ -15,10 +15,12 @@ const speciesPath = path.join(root, 'src/data/species.json')
 const outDir = path.join(root, 'public/catalog/images')
 const species = JSON.parse(fs.readFileSync(speciesPath, 'utf8'))
 
-const genusArg = process.argv.find((a) => a.startsWith('--genus='))?.split('=')[1]
+const genusArgs = process.argv.filter((a) => a.startsWith('--genus=')).map((a) => a.split('=')[1]).filter(Boolean)
+const EMPTY_ONLY = process.argv.includes('--empty-only')
 const NEW_GENERA = new Set([
   'Grevillea', 'Correa', 'Westringia', 'Anigozanthos', 'Lomandra',
   'Hardenbergia', 'Kennedia', 'Dianella', 'Patersonia', 'Thomasia', 'Chamelaucium',
+  'Callistemon', 'Banksia', 'Melaleuca', 'Isopogon',
 ])
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -300,7 +302,12 @@ async function downloadUnique(url, destBase) {
   }
 }
 
-const targets = species.filter((s) => (genusArg ? s.genus === genusArg : NEW_GENERA.has(s.genus)))
+const targets = species.filter((s) => {
+  if (genusArgs.length && !genusArgs.includes(s.genus)) return false
+  if (!genusArgs.length && !NEW_GENERA.has(s.genus)) return false
+  if (EMPTY_ONLY && s.image_url && String(s.image_url).startsWith('/catalog/')) return false
+  return true
+})
 console.log(`Strict re-localize ${targets.length} plants…`)
 
 let ok = 0

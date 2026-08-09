@@ -53,6 +53,7 @@ export function MyPlantDetailPanel({
   const threatened = Boolean(species?.conservation_status && species.conservation_status !== 'Least Concern')
   const title = species?.scientific_name || plant.custom_name || 'Plant'
   const common = plant.custom_name || species?.common_name || ''
+  const isPurchase = plant.source === 'purchase'
 
   return (
     <div className="bg-white leading-relaxed">
@@ -125,32 +126,40 @@ export function MyPlantDetailPanel({
           )}
 
           <div className="bg-white border border-slate-200/50 rounded-xl p-3 shadow-xs grid grid-cols-2 gap-2">
-            <label className="block">
-              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Sown Date</span>
-              <input
-                type="date"
-                value={plant.sow_date || ''}
-                onChange={(e) => onSave({ sow_date: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-[11px] mt-1 outline-none"
-              />
-            </label>
-            <label className="block">
-              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Germinated Date</span>
-              <input
-                type="date"
-                value={plant.germ_date || ''}
-                disabled={plant.germ_status !== 'Germinated'}
-                onChange={(e) => onSave({ germ_date: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-[11px] mt-1 outline-none disabled:opacity-40"
-              />
-            </label>
+            {isPurchase ? (
+              <p className="col-span-2 text-[11px] text-slate-500 m-0 rounded-lg bg-slate-50 border border-slate-100 px-2.5 py-2">
+                Purchased plants don’t use seed sowing or germination status.
+              </p>
+            ) : (
+              <>
+                <label className="block">
+                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Sown Date</span>
+                  <input
+                    type="date"
+                    value={plant.sow_date || ''}
+                    onChange={(e) => onSave({ sow_date: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-[11px] mt-1 outline-none"
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Germinated Date</span>
+                  <input
+                    type="date"
+                    value={plant.germ_date || ''}
+                    disabled={plant.germ_status !== 'Germinated'}
+                    onChange={(e) => onSave({ germ_date: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-[11px] mt-1 outline-none disabled:opacity-40"
+                  />
+                </label>
+              </>
+            )}
             <label className="block col-span-2">
               <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Field Log Notes</span>
               <textarea
                 rows={2}
                 value={plant.notes}
                 onChange={(e) => onSave({ notes: e.target.value })}
-                placeholder="Potting logs, temperatures, results…"
+                placeholder={isPurchase ? 'Planting notes, watering, pests…' : 'Potting logs, temperatures, results…'}
                 className="w-full bg-white border border-slate-200 rounded px-1.5 py-1 text-[11px] outline-none"
               />
             </label>
@@ -178,7 +187,14 @@ export function MyPlantDetailPanel({
               <span className="text-[9px] text-slate-400 font-bold uppercase">Source</span>
               <select
                 value={plant.source}
-                onChange={(e) => onSave({ source: e.target.value as PlantSource })}
+                onChange={(e) => {
+                  const source = e.target.value as PlantSource
+                  if (source === 'purchase') {
+                    onSave({ source, sow_date: '', germ_date: '', germ_status: 'Unstarted' })
+                  } else {
+                    onSave({ source })
+                  }
+                }}
                 className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5"
               >
                 {SOURCES.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -188,10 +204,14 @@ export function MyPlantDetailPanel({
               <span className="text-[9px] text-slate-400 font-bold uppercase">Sow status</span>
               <select
                 value={plant.germ_status}
+                disabled={isPurchase}
                 onChange={(e) => onSave({ germ_status: e.target.value as GermStatus })}
-                className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5"
+                className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+                title={isPurchase ? 'Not used for purchased plants' : undefined}
               >
-                {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                {isPurchase
+                  ? <option value={plant.germ_status}>N/A (purchased)</option>
+                  : STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
             </label>
             <label className="grid gap-1">

@@ -12,11 +12,11 @@ import type {
 
 const KEY = 'au_natives_garden_v2'
 const LOCAL_USER_ID = 'local-user'
-const CATALOG_VERSION = 11
+const CATALOG_VERSION = 12
 /** Versions before this may have placeholder water=4; force-sync from catalog once. */
 const SITE_NEEDS_SYNC_BEFORE = 7
 /** Versions before this should pull refreshed catalog photos (unless user linked a custom web/upload image). */
-const IMAGE_SYNC_BEFORE = 11
+const IMAGE_SYNC_BEFORE = 12
 
 type DbShape = {
   catalogVersion?: number
