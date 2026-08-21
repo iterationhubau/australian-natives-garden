@@ -283,6 +283,20 @@ export const api = {
   async setGermStatus(id: string, status: GermStatus) {
     return this.updatePlant(id, { germ_status: status })
   },
+
+  exportBackup(): string {
+    if (supabase) {
+      throw new Error('Backup export is for local mode. Cloud data lives in your Supabase project.')
+    }
+    return localApi.exportBackup()
+  },
+
+  importBackup(json: string): { plants: number; sites: number; species: number } {
+    if (supabase) {
+      throw new Error('Backup import is for local mode. Cloud data lives in your Supabase project.')
+    }
+    return localApi.importBackup(json)
+  },
 }
 
 function blobToDataUrl(blob: Blob): Promise<string> {

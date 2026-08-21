@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { api } from '../lib/api'
 import { Icon } from './Icon'
+import { Toast } from './Toast'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
   `px-3 py-1.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap ${
@@ -15,9 +17,47 @@ export function Layout() {
   const [hideLocalBanner, setHideLocalBanner] = useState(
     () => sessionStorage.getItem('hide_local_banner') === '1',
   )
+  const [toast, setToast] = useState('')
+  const [toastTone, setToastTone] = useState<'ok' | 'error'>('ok')
+  const importRef = useRef<HTMLInputElement>(null)
+
+  function exportBackup() {
+    try {
+      const json = api.exportBackup()
+      const blob = new Blob([json], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `au-natives-garden-backup-${new Date().toISOString().slice(0, 10)}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+      setToastTone('ok')
+      setToast('Backup downloaded')
+    } catch (err) {
+      setToastTone('error')
+      setToast(err instanceof Error ? err.message : 'Export failed')
+    }
+  }
+
+  function importBackup(file: File) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const summary = api.importBackup(String(reader.result || ''))
+        setToastTone('ok')
+        setToast(`Restored ${summary.plants} plants · ${summary.sites} sites · ${summary.species} species`)
+        window.setTimeout(() => window.location.reload(), 600)
+      } catch (err) {
+        setToastTone('error')
+        setToast(err instanceof Error ? err.message : 'Import failed')
+      }
+    }
+    reader.readAsText(file)
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900">
+      {toast && <Toast message={toast} onDismiss={() => setToast('')} tone={toastTone} />}
       <header className="sticky top-0 z-30 bg-emerald-900 text-white border-b border-emerald-800 shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3">
@@ -37,6 +77,37 @@ export function Layout() {
               </div>
 
               <div className="flex flex-wrap items-center gap-2 shrink-0">
+                {isLocalMode && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={exportBackup}
+                      className="bg-emerald-800 hover:bg-emerald-700 border border-emerald-700 text-emerald-100 px-3 py-1.5 rounded-xl text-sm"
+                      title="Download a JSON backup of local data"
+                    >
+                      Export
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => importRef.current?.click()}
+                      className="bg-emerald-800 hover:bg-emerald-700 border border-emerald-700 text-emerald-100 px-3 py-1.5 rounded-xl text-sm"
+                      title="Restore from a JSON backup"
+                    >
+                      Import
+                    </button>
+                    <input
+                      ref={importRef}
+                      type="file"
+                      accept="application/json,.json"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (file) importBackup(file)
+                        e.target.value = ''
+                      }}
+                    />
+                  </>
+                )}
                 {isLocalMode ? (
                   <span className="text-[10px] bg-emerald-800/80 border border-emerald-700 text-emerald-300 px-2 py-0.5 rounded-full font-mono uppercase tracking-wider">
                     Local
@@ -80,7 +151,8 @@ export function Layout() {
         <div className="bg-amber-50 border-b border-amber-200 text-amber-950 text-sm px-4 py-2">
           <div className="max-w-7xl mx-auto flex items-start justify-between gap-3">
             <p className="m-0">
-              Local mode — data stays on this device. Cloud sync setup is in <code className="font-mono text-xs">web/SETUP.md</code>.
+              Local mode — data stays in this browser on this site. Use <strong className="font-semibold">Export</strong> for a backup.
+              Opening the old HTML file or a different URL won’t share the same save.
             </p>
             <button
               type="button"

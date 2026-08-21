@@ -339,10 +339,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure, common across Western Australian sandplains.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu9bq5sq5IAnDGYbuP4k-oXb2y0jDSIStYvw&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/13.jpg',
+  'Jean and Fred from  Perth, Australia · Wikimedia Commons',
+  'CC BY 2.0',
+  'library_cc'
 ),
 (
   '14',
@@ -443,10 +443,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure, endemic to the southern coastal areas.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg9I823DgBAN0DYj034VE28URFOhRgbNNb9Q&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/17.jpg',
+  'Geoff Derrin · Wikimedia Commons',
+  'CC BY-SA 4.0',
+  'library_cc'
 ),
 (
   '18',
@@ -469,10 +469,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure, found in seasonally wet flats.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfzV5Uv25wbcfJh_vqxH7rPvwezsHMHjQPFA&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/18.jpg',
+  'Geoff Derrin · Wikimedia Commons',
+  'CC BY-SA 4.0',
+  'library_cc'
 ),
 (
   '19',
@@ -625,10 +625,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure on southwest gravel zones.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcOHnCkKJ3Ks0UDQNdI7rvRJmxXrd7D_vDQg&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/24.jpg',
+  'Geoff Derrin · Wikimedia Commons',
+  'CC BY-SA 4.0',
+  'library_cc'
 ),
 (
   '25',
@@ -729,10 +729,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Endemic to coastal plains, secure.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfTuvJUZokTRQKXqft43PR066ZLg3CveWukw&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/28.jpg',
+  'Geoff Derrin · Wikimedia Commons',
+  'CC BY-SA 4.0',
+  'library_cc'
 ),
 (
   '29',
@@ -807,10 +807,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure on northwest sands.',
-  'https://www.anbg.gov.au/images/photo_cd/132_JWW/a-40828_2.jpg',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/31.jpg',
+  'Geoff Derrin · Wikimedia Commons',
+  'CC BY-SA 4.0',
+  'library_cc'
 ),
 (
   '32',
@@ -833,10 +833,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure, found in dry sandbelts.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrW1cMipdnn-d056W9U8XzxBwyeDrvhKgTCQ&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/32.jpg',
+  'Geoff Derrin · Wikimedia Commons',
+  'CC BY-SA 4.0',
+  'library_cc'
 ),
 (
   '33',
@@ -1509,10 +1509,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Common coastal plain species, highly secure.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0a0kuoqgAHffhWP7taGuJ3_-FM1_QPqftaw&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/58.jpg',
+  '(c) Andre Georgieff, all rights reserved',
+  'See iNaturalist',
+  'library_cc'
 ),
 (
   '59',
@@ -1561,10 +1561,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure, common across southern flats.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZsrDBM56eA5PA_D-W4dnXBFIo5V55gXucww&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/60.jpg',
+  '(c) Kerry + Darren, some rights reserved (CC BY-NC)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '61',
@@ -1587,9 +1587,9 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure on south coast plains.',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Melaleuca_glaberrima_%28habit%29.JPG/250px-Melaleuca_glaberrima_%28habit%29.JPG',
-  'Wikimedia Commons',
-  'See source page',
+  '/catalog/images/61.jpg',
+  'Geoff Derrin · Wikimedia Commons',
+  'CC BY-SA 4.0',
   'library_cc'
 ),
 (
@@ -1613,10 +1613,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure, widespread coastal dweller.',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA5Zl8UT2-E13dr8XmAlxX9Ehv-JuYtKyH2g&s',
-  '',
-  '',
-  'web_link'
+  '/catalog/images/62.jpg',
+  '(c) Andre Georgieff, all rights reserved',
+  'See iNaturalist',
+  'library_cc'
 ),
 (
   '63',
@@ -2549,9 +2549,9 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar; not a wild conservation taxon.',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Young_banksia_flower.jpg/1280px-Young_banksia_flower.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail',
-  'EdenTariq',
-  'CC BY-SA 4.0',
+  '/catalog/images/98.jpg',
+  '(c) Adrian Gale, some rights reserved (CC BY-NC) · Banksia (species photo; cultivar-specific image not found)',
+  'cc-by-nc',
   'library_cc'
 ),
 (
@@ -2575,8 +2575,8 @@ insert into public.species (
   'Least Concern',
   'NSW',
   'Species secure in coastal heath; dwarf forms are garden selections.',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Banksia_ericifolia_flower1.JPG/1280px-Banksia_ericifolia_flower1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail',
-  'John Moss',
+  '/catalog/images/99.jpg',
+  'No machine-readable author provided. Casliber assumed (based on copyright claims). · Wikimedia Commons',
   'Public domain',
   'library_cc'
 ),
@@ -2601,8 +2601,8 @@ insert into public.species (
   'Least Concern',
   'SE Australia',
   'Widespread in south-eastern Australia; bright-flower forms selected for gardens.',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Banksia_marginata_immature_and_mature.jpg/1280px-Banksia_marginata_immature_and_mature.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail',
-  'JJ Harrison (https://www.jjharrison.com.au/)',
+  '/catalog/images/100.jpg',
+  'No machine-readable author provided. PDH assumed (based on copyright claims). · Wikimedia Commons',
   'CC BY-SA 3.0',
   'library_cc'
 ),
@@ -2627,9 +2627,9 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Popular compact Banksia spinulosa cultivar for smaller gardens.',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Banksia_spinulosa_-_flowers%2C_Christchurch_Botanic_Gardens%2C_Canterbury%2C_New_Zealand.jpg/1280px-Banksia_spinulosa_-_flowers%2C_Christchurch_Botanic_Gardens%2C_Canterbury%2C_New_Zealand.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail',
-  'Michal Klajban',
-  'CC BY-SA 4.0',
+  '/catalog/images/101.jpg',
+  '(c) Lucas Christofides, some rights reserved (CC BY) · Banksia spinulosa (species photo; cultivar-specific image not found)',
+  'cc-by',
   'library_cc'
 ),
 (
@@ -2653,9 +2653,9 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Widely grown dwarf bottlebrush cultivar (also listed under Melaleuca viminalis).',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Starr-090806-4069-Callistemon_viminalis-little_john_flowers_and_leaves-Kahului-Maui_%2824345006023%29.jpg/1280px-Starr-090806-4069-Callistemon_viminalis-little_john_flowers_and_leaves-Kahului-Maui_%2824345006023%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail',
-  'Forest and Kim Starr',
-  'CC BY 3.0 us',
+  '/catalog/images/102.jpg',
+  'Ruff tuff cream puff · Wikimedia Commons',
+  'CC0',
   'library_cc'
 ),
 (
@@ -2783,9 +2783,9 @@ insert into public.species (
   'Least Concern',
   'SA / VIC',
   'Species common in south-eastern Australia; dwarf forms selected for smaller gardens.',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Melaleuca_decussata_purple_flowers.jpg/1280px-Melaleuca_decussata_purple_flowers.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail',
-  'Solarence',
-  'CC0',
+  '/catalog/images/107.jpg',
+  '(c) tstayns, some rights reserved (CC BY-NC)',
+  'cc-by-nc',
   'library_cc'
 ),
 (
@@ -4551,10 +4551,10 @@ insert into public.species (
   'Least Concern',
   'NSW / VIC / QLD',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/175.jpg',
+  'JJ Harrison (https://www.jjharrison.com.au/) · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '176',
@@ -4629,10 +4629,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/178.jpg',
+  'Melburnian · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '179',
@@ -4733,10 +4733,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/182.jpg',
+  'simonfromwollongong · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '183',
@@ -4837,10 +4837,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/186.jpg',
+  'Wikipedia · <i>Callistemon</i>',
+  'Wikipedia / source license',
+  'library_cc'
 ),
 (
   '187',
@@ -4863,10 +4863,10 @@ insert into public.species (
   'Least Concern',
   'Eastern Australia coasts',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/187.jpg',
+  'Roger Culos · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '188',
@@ -4889,10 +4889,10 @@ insert into public.species (
   'Least Concern',
   'Eastern Australia',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/188.jpg',
+  'Casliber · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '189',
@@ -4915,10 +4915,10 @@ insert into public.species (
   'Least Concern',
   'Eastern Australia',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/189.jpg',
+  '(c) Lucas Christofides, some rights reserved (CC BY)',
+  'cc-by',
+  'library_cc'
 ),
 (
   '190',
@@ -4941,10 +4941,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/190.jpg',
+  '(c) Lucas Christofides, some rights reserved (CC BY) · Banksia spinulosa (species photo; cultivar-specific image not found)',
+  'cc-by',
+  'library_cc'
 ),
 (
   '191',
@@ -4967,10 +4967,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/191.jpg',
+  '(c) Lucas Christofides, some rights reserved (CC BY) · Banksia spinulosa (species photo; cultivar-specific image not found)',
+  'cc-by',
+  'library_cc'
 ),
 (
   '192',
@@ -4993,10 +4993,10 @@ insert into public.species (
   'Least Concern',
   'WA / SA',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/192.jpg',
+  'No machine-readable author provided. PDH assumed (based on copyright claims). · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '193',
@@ -5019,10 +5019,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/193.jpg',
+  '(c) pheonix_qiu, some rights reserved (CC BY-NC)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '194',
@@ -5045,10 +5045,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/194.jpg',
+  '(c) Joey Santore, some rights reserved (CC BY-NC) · Banksia (species photo; cultivar-specific image not found)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '195',
@@ -5071,10 +5071,10 @@ insert into public.species (
   'Least Concern',
   'Eastern Australia',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/195.jpg',
+  'Dgarte · Wikimedia Commons',
+  'CC0',
+  'library_cc'
 ),
 (
   '196',
@@ -5097,10 +5097,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/196.jpg',
+  '(c) Joey Santore, some rights reserved (CC BY-NC) · Banksia (species photo; cultivar-specific image not found)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '197',
@@ -5123,10 +5123,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/197.jpg',
+  'Cygnis insignis · Wikimedia Commons',
+  'Public domain',
+  'library_cc'
 ),
 (
   '198',
@@ -5149,10 +5149,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/198.jpg',
+  '(c) Taylor, some rights reserved (CC BY-NC) · Banksia ericifolia (species photo; cultivar-specific image not found)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '199',
@@ -5175,10 +5175,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/199.jpg',
+  'Eric in SF · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '200',
@@ -5201,10 +5201,10 @@ insert into public.species (
   'Least Concern',
   'Eastern Australia',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/200.jpg',
+  'Eug · Wikimedia Commons',
+  'CC BY 3.0',
+  'library_cc'
 ),
 (
   '201',
@@ -5227,10 +5227,10 @@ insert into public.species (
   'Least Concern',
   'Eastern Australia',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/201.jpg',
+  'Poyt448 Peter Woodard · Wikimedia Commons',
+  'Public domain',
+  'library_cc'
 ),
 (
   '202',
@@ -5253,10 +5253,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/202.jpg',
+  '(c) Irene Richardson, some rights reserved (CC BY-NC) · Melaleuca thymifolia (species photo; cultivar-specific image not found)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '203',
@@ -5279,10 +5279,10 @@ insert into public.species (
   'Least Concern',
   'NSW / VIC',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/203.jpg',
+  'Melburnian · Wikimedia Commons',
+  'CC BY 3.0',
+  'library_cc'
 ),
 (
   '204',
@@ -5305,10 +5305,10 @@ insert into public.species (
   'Least Concern',
   'SE Australia',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/204.jpg',
+  'No machine-readable author provided. Eug assumed (based on copyright claims). · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '205',
@@ -5331,10 +5331,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/205.jpg',
+  '(c) overlander (Gerald Krygsman), some rights reserved (CC BY-NC) · Melaleuca (species photo; cultivar-specific image not found)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '206',
@@ -5357,10 +5357,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/206.jpg',
+  'User:BotBln · Wikimedia Commons',
+  'CC BY 2.5',
+  'library_cc'
 ),
 (
   '207',
@@ -5409,10 +5409,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/208.jpg',
+  '(c) tarabithia, some rights reserved (CC BY-NC) · Melaleuca nesophila (species photo; cultivar-specific image not found)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '209',
@@ -5435,10 +5435,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/209.jpg',
+  'division, CSIRO · Wikimedia Commons',
+  'CC BY 3.0',
+  'library_cc'
 ),
 (
   '210',
@@ -5461,10 +5461,10 @@ insert into public.species (
   'Least Concern',
   'NSW / QLD',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/210.jpg',
+  'Babstar · Wikimedia Commons',
+  'CC BY 3.0',
+  'library_cc'
 ),
 (
   '211',
@@ -5487,10 +5487,10 @@ insert into public.species (
   'Least Concern',
   'WA',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/211.jpg',
+  '(c) jennlavers, some rights reserved (CC BY-NC)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '212',
@@ -5513,10 +5513,10 @@ insert into public.species (
   'Least Concern',
   'NSW',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/212.jpg',
+  '(c) Damian Butler, some rights reserved (CC BY-NC)',
+  'cc-by-nc',
+  'library_cc'
 ),
 (
   '213',
@@ -5539,10 +5539,10 @@ insert into public.species (
   'Least Concern',
   'NSW',
   'Secure in suitable native habitats; widely grown in Australian gardens.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/213.jpg',
+  'C T Johansson · Wikimedia Commons',
+  'CC BY-SA 3.0',
+  'library_cc'
 ),
 (
   '214',
@@ -5565,10 +5565,10 @@ insert into public.species (
   'Cultivar',
   'Garden / nursery selection',
   'Garden cultivar / selection; not assessed as a wild conservation taxon.',
-  '',
-  '',
-  '',
-  null
+  '/catalog/images/214.jpg',
+  '(c) Connor Margetts, some rights reserved (CC BY) · Isopogon (species photo; cultivar-specific image not found)',
+  'cc-by',
+  'library_cc'
 )
 on conflict (legacy_id) do update set
   scientific_name = excluded.scientific_name,

@@ -8,6 +8,13 @@ import { SpeciesImage } from '../components/SpeciesImage'
 import { Toast } from '../components/Toast'
 import { useAuth } from '../contexts/AuthContext'
 import { api } from '../lib/api'
+import {
+  SORT_OPTIONS,
+  compareSpecies,
+  nextSortConfig,
+  type SortConfig,
+  type SortKey,
+} from '../lib/librarySort'
 import type { PlantSource, Species } from '../types/models'
 
 const GENERA = [
@@ -45,6 +52,7 @@ export function LibraryPage() {
   const [q, setQ] = useState('')
   const [genus, setGenus] = useState<(typeof GENERA)[number]>('All')
   const [viewMode, setViewMode] = useState<'list' | 'grid'>(loadViewMode)
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'scientific_name', direction: 'ascending' })
   const [activeId, setActiveId] = useState<string | null>(null)
   const [toast, setToast] = useState('')
   const [loading, setLoading] = useState(true)
@@ -66,13 +74,25 @@ export function LibraryPage() {
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase()
-    return species.filter((s) => {
+    const rows = species.filter((s) => {
       if (genus !== 'All' && s.genus !== genus) return false
       if (!query) return true
-      return [s.scientific_name, s.common_name, s.flowering_time, s.soil_preference, s.genus]
-        .some((v) => v.toLowerCase().includes(query))
+      return [s.scientific_name, s.common_name, s.flowering_time, s.soil_preference, s.genus, s.frost_tolerance, s.drought_tolerance]
+        .some((v) => (v || '').toLowerCase().includes(query))
     })
-  }, [species, q, genus])
+    return rows.slice().sort((a, b) => compareSpecies(a, b, sortConfig))
+  }, [species, q, genus, sortConfig])
+
+  function sortIndicator(key: SortKey) {
+    if (sortConfig.key !== key) return <span className="text-slate-300 ml-1 text-[10px]">↕</span>
+    return sortConfig.direction === 'ascending'
+      ? <span className="text-emerald-700 ml-1 text-[10px]">▲</span>
+      : <span className="text-emerald-700 ml-1 text-[10px]">▼</span>
+  }
+
+  function requestSort(key: SortKey) {
+    setSortConfig((prev) => nextSortConfig(prev, key))
+  }
 
   const active = useMemo(
     () => (activeId ? species.find((s) => s.id === activeId) ?? null : null),
@@ -143,6 +163,22 @@ export function LibraryPage() {
           </div>
 
           <div className="flex items-center justify-between gap-3">
+            <label className="flex items-center gap-2 text-xs text-slate-500">
+              <span className="font-semibold uppercase tracking-wider text-[10px]">Sort</span>
+              <select
+                value={`${sortConfig.key}:${sortConfig.direction}`}
+                onChange={(e) => {
+                  const [key, direction] = e.target.value.split(':') as [SortKey, SortConfig['direction']]
+                  setSortConfig({ key, direction })
+                }}
+                className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-slate-700"
+              >
+                {SORT_OPTIONS.flatMap((o) => [
+                  <option key={`${o.key}:ascending`} value={`${o.key}:ascending`}>{o.label} ↑</option>,
+                  <option key={`${o.key}:descending`} value={`${o.key}:descending`}>{o.label} ↓</option>,
+                ])}
+              </select>
+            </label>
             <div className="flex items-center border border-slate-200 rounded-xl p-1 bg-slate-50">
               <button
                 type="button"
@@ -285,14 +321,30 @@ export function LibraryPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[860px]">
               <thead>
-                <tr className="bg-slate-100 border-b border-slate-200 text-xs text-slate-500 font-bold uppercase tracking-wider">
+                <tr className="bg-slate-100 border-b border-slate-200 text-xs text-slate-500 font-bold uppercase tracking-wider select-none">
                   <th className="w-10 px-3 py-2.5 text-center">#</th>
                   <th className="w-16 px-2 py-2.5 text-center">Photo</th>
-                  <th className="px-3 py-2.5">Scientific name</th>
-                  <th className="px-3 py-2.5">Common name</th>
-                  <th className="px-2 py-2.5 text-center">Genus</th>
-                  <th className="px-3 py-2.5 text-center">Flowering</th>
-                  <th className="px-2 py-2.5 text-center">Status</th>
+                  <th className="px-3 py-2.5 cursor-pointer hover:bg-slate-200/60" onClick={() => requestSort('scientific_name')}>
+                    <span className="inline-flex items-center">Scientific{sortIndicator('scientific_name')}</span>
+                  </th>
+                  <th className="px-3 py-2.5 cursor-pointer hover:bg-slate-200/60" onClick={() => requestSort('common_name')}>
+                    <span className="inline-flex items-center">Common{sortIndicator('common_name')}</span>
+                  </th>
+                  <th className="px-2 py-2.5 text-center cursor-pointer hover:bg-slate-200/60" onClick={() => requestSort('genus')}>
+                    <span className="inline-flex items-center justify-center">Genus{sortIndicator('genus')}</span>
+                  </th>
+                  <th className="px-3 py-2.5 text-center cursor-pointer hover:bg-slate-200/60" onClick={() => requestSort('flowering_time')}>
+                    <span className="inline-flex items-center justify-center">Flowering{sortIndicator('flowering_time')}</span>
+                  </th>
+                  <th className="px-2 py-2.5 text-center cursor-pointer hover:bg-slate-200/60" onClick={() => requestSort('frost_tolerance')}>
+                    <span className="inline-flex items-center justify-center">Frost{sortIndicator('frost_tolerance')}</span>
+                  </th>
+                  <th className="px-2 py-2.5 text-center cursor-pointer hover:bg-slate-200/60" onClick={() => requestSort('drought_tolerance')}>
+                    <span className="inline-flex items-center justify-center">Drought{sortIndicator('drought_tolerance')}</span>
+                  </th>
+                  <th className="px-2 py-2.5 text-center cursor-pointer hover:bg-slate-200/60" onClick={() => requestSort('conservation_status')}>
+                    <span className="inline-flex items-center justify-center">Status{sortIndicator('conservation_status')}</span>
+                  </th>
                   <th className="w-24 px-2 py-2.5 text-center" />
                 </tr>
               </thead>
@@ -317,6 +369,12 @@ export function LibraryPage() {
                       <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 font-semibold">{s.genus}</span>
                     </td>
                     <td className="px-3 py-2.5 text-center text-xs text-slate-600">{s.flowering_time}</td>
+                    <td className="px-2 py-2.5 text-center text-[11px] text-slate-600" title={s.frost_tolerance}>
+                      {s.frost_tolerance || '—'}
+                    </td>
+                    <td className="px-2 py-2.5 text-center text-[11px] text-slate-600" title={s.drought_tolerance}>
+                      {s.drought_tolerance || '—'}
+                    </td>
                     <td className="px-2 py-2.5 text-center">
                       <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${conservationClass(s.conservation_status)}`}>
                         {s.conservation_status || 'Least Concern'}

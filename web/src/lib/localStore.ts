@@ -11,12 +11,13 @@ import type {
 } from '../types/models'
 
 const KEY = 'au_natives_garden_v2'
+const LEGACY_HTML_KEY = 'native_seed_inventory_complete_66'
 const LOCAL_USER_ID = 'local-user'
-const CATALOG_VERSION = 12
+const CATALOG_VERSION = 13
 /** Versions before this may have placeholder water=4; force-sync from catalog once. */
 const SITE_NEEDS_SYNC_BEFORE = 7
 /** Versions before this should pull refreshed catalog photos (unless user linked a custom web/upload image). */
-const IMAGE_SYNC_BEFORE = 12
+const IMAGE_SYNC_BEFORE = 13
 
 type DbShape = {
   catalogVersion?: number
@@ -101,21 +102,125 @@ function mergeCatalog(existing: Species[], opts?: { syncSiteNeeds?: boolean; syn
   return merged
 }
 
+function save(db: DbShape) {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(db))
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Storage write failed'
+    console.error('localStore.save failed', err)
+    throw new Error(
+      msg.toLowerCase().includes('quota')
+        ? 'Browser storage is full. Export a backup, then remove some progress photos.'
+        : `Could not save locally: ${msg}`,
+    )
+  }
+}
+
+type LegacyHtmlSeed = {
+  id?: string
+  scientificName?: string
+  commonName?: string
+  status?: GermStatus
+  sowDate?: string
+  germDate?: string
+  notes?: string
+  quantity?: string
+  imageUrl?: string
+}
+
+/** One-time import of sow logs / notes / photo URLs from the old single-file HTML tracker. */
+function migrateLegacyHtmlInventory(db: DbShape): boolean {
+  if (localStorage.getItem(`${KEY}_migrated_html66`) === '1') return false
+  const raw = localStorage.getItem(LEGACY_HTML_KEY)
+  if (!raw) {
+    localStorage.setItem(`${KEY}_migrated_html66`, '1')
+    return false
+  }
+  let parsed: LegacyHtmlSeed[] = []
+  try {
+    parsed = JSON.parse(raw) as LegacyHtmlSeed[]
+  } catch {
+    localStorage.setItem(`${KEY}_migrated_html66`, '1')
+    return false
+  }
+  if (!Array.isArray(parsed) || !parsed.length) {
+    localStorage.setItem(`${KEY}_migrated_html66`, '1')
+    return false
+  }
+
+  let changed = false
+  const byLegacy = new Map(db.species.map((s) => [s.legacy_id, s]))
+  const byName = new Map(db.species.map((s) => [s.scientific_name.toLowerCase(), s]))
+
+  for (const row of parsed) {
+    const name = (row.scientificName || '').trim()
+    if (!name) continue
+    const species =
+      (row.id ? byLegacy.get(String(row.id)) : undefined) ||
+      byName.get(name.toLowerCase())
+    if (!species) continue
+
+    if (row.imageUrl && row.imageUrl !== species.image_url) {
+      species.image_url = row.imageUrl
+      species.image_source = row.imageUrl.includes('wikimedia') ? 'library_cc' : 'web_link'
+      changed = true
+    }
+    if (row.commonName && row.commonName !== species.common_name) {
+      species.common_name = row.commonName
+      changed = true
+    }
+
+    const hasProgress =
+      Boolean(row.sowDate || row.germDate || row.notes) ||
+      (row.status && row.status !== 'Unstarted')
+    if (!hasProgress) continue
+
+    const already = db.plants.some((p) => p.species_id === species.id && p.source === 'seed')
+    if (already) continue
+
+    db.plants.push({
+      id: uid(),
+      user_id: LOCAL_USER_ID,
+      species_id: species.id,
+      custom_name: row.commonName || species.common_name || '',
+      source: 'seed',
+      germ_status: (row.status as GermStatus) || 'Unstarted',
+      sow_date: row.sowDate || '',
+      germ_date: row.germDate || '',
+      quantity: row.quantity || '',
+      notes: row.notes || '',
+      created_at: now(),
+      updated_at: now(),
+    })
+    changed = true
+  }
+
+  localStorage.setItem(`${KEY}_migrated_html66`, '1')
+  return changed
+}
+
 function load(): DbShape {
-  // Migrate from v1 if present
   const raw = localStorage.getItem(KEY) || localStorage.getItem('au_natives_garden_v1')
   if (raw) {
     try {
       const parsed = JSON.parse(raw) as DbShape
+      parsed.plants = parsed.plants || []
+      parsed.sites = parsed.sites || []
+      parsed.plantings = parsed.plantings || []
+      parsed.images = parsed.images || []
+      parsed.species = parsed.species || []
       const prevVersion = parsed.catalogVersion ?? 0
-      if (prevVersion < CATALOG_VERSION || !parsed.species?.length) {
-        parsed.species = mergeCatalog(parsed.species || [], {
+      let dirty = false
+      if (prevVersion < CATALOG_VERSION || !parsed.species.length) {
+        parsed.species = mergeCatalog(parsed.species, {
           syncSiteNeeds: prevVersion < SITE_NEEDS_SYNC_BEFORE,
           syncImages: prevVersion < IMAGE_SYNC_BEFORE,
         })
         parsed.catalogVersion = CATALOG_VERSION
-        save(parsed)
+        dirty = true
       }
+      if (migrateLegacyHtmlInventory(parsed)) dirty = true
+      if (dirty) save(parsed)
       return parsed
     } catch {
       /* fall through */
@@ -129,12 +234,9 @@ function load(): DbShape {
     plantings: [],
     images: [],
   }
+  migrateLegacyHtmlInventory(db)
   save(db)
   return db
-}
-
-function save(db: DbShape) {
-  localStorage.setItem(KEY, JSON.stringify(db))
 }
 
 export const localApi = {
@@ -330,5 +432,30 @@ export const localApi = {
 
   setGermStatus(id: string, status: GermStatus) {
     return this.updatePlant(id, { germ_status: status })
+  },
+
+  exportBackup(): string {
+    return JSON.stringify(load(), null, 2)
+  },
+
+  importBackup(json: string): { plants: number; sites: number; species: number } {
+    const parsed = JSON.parse(json) as DbShape
+    if (!parsed || !Array.isArray(parsed.species)) {
+      throw new Error('Invalid backup file — expected a garden database export.')
+    }
+    const db: DbShape = {
+      catalogVersion: Math.max(parsed.catalogVersion ?? 0, CATALOG_VERSION),
+      species: mergeCatalog(parsed.species, { syncSiteNeeds: true, syncImages: true }),
+      sites: parsed.sites || [],
+      plants: parsed.plants || [],
+      plantings: parsed.plantings || [],
+      images: parsed.images || [],
+    }
+    save(db)
+    return {
+      plants: db.plants.length,
+      sites: db.sites.length,
+      species: db.species.length,
+    }
   },
 }
