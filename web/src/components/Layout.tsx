@@ -1,7 +1,16 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { api } from '../lib/api'
+import {
+  chooseSyncFolder,
+  disconnectSyncFolder,
+  enableAutoFolderSync,
+  folderSyncSupported,
+  getFolderSyncMeta,
+  loadFromFolder,
+  syncToFolder,
+} from '../lib/folderSync'
 import { Icon } from './Icon'
 import { Toast } from './Toast'
 
@@ -12,6 +21,15 @@ const navClass = ({ isActive }: { isActive: boolean }) =>
       : 'text-emerald-100/90 hover:bg-emerald-800/80 hover:text-white'
   }`
 
+function formatSyncTime(iso: string | null) {
+  if (!iso) return 'never'
+  try {
+    return new Date(iso).toLocaleString()
+  } catch {
+    return iso
+  }
+}
+
 export function Layout() {
   const { isLocalMode, user, signOut, signInWithGoogle } = useAuth()
   const [hideLocalBanner, setHideLocalBanner] = useState(
@@ -19,7 +37,25 @@ export function Layout() {
   )
   const [toast, setToast] = useState('')
   const [toastTone, setToastTone] = useState<'ok' | 'error'>('ok')
+  const [folderMeta, setFolderMeta] = useState(() => getFolderSyncMeta())
+  const [folderMenuOpen, setFolderMenuOpen] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
+  const folderMenuRef = useRef<HTMLDivElement>(null)
+  const canFolderSync = folderSyncSupported()
+
+  useEffect(() => {
+    if (!isLocalMode) return
+    enableAutoFolderSync(() => api.exportBackup())
+  }, [isLocalMode])
+
+  useEffect(() => {
+    if (!folderMenuOpen) return
+    function onDocClick(e: MouseEvent) {
+      if (!folderMenuRef.current?.contains(e.target as Node)) setFolderMenuOpen(false)
+    }
+    document.addEventListener('mousedown', onDocClick)
+    return () => document.removeEventListener('mousedown', onDocClick)
+  }, [folderMenuOpen])
 
   function exportBackup() {
     try {
@@ -53,6 +89,55 @@ export function Layout() {
       }
     }
     reader.readAsText(file)
+  }
+
+  async function linkFolder() {
+    try {
+      const meta = await chooseSyncFolder(() => api.exportBackup())
+      setFolderMeta(meta)
+      setFolderMenuOpen(false)
+      setToastTone('ok')
+      setToast(`Syncing to folder “${meta.folderName}”`)
+    } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') return
+      setToastTone('error')
+      setToast(err instanceof Error ? err.message : 'Could not link folder')
+    }
+  }
+
+  async function syncNow() {
+    try {
+      const meta = await syncToFolder(() => api.exportBackup(), { prompt: true })
+      if (meta) setFolderMeta(meta)
+      setFolderMenuOpen(false)
+      setToastTone('ok')
+      setToast('Saved to sync folder')
+    } catch (err) {
+      setToastTone('error')
+      setToast(err instanceof Error ? err.message : 'Sync failed')
+    }
+  }
+
+  async function loadFolder() {
+    try {
+      const { meta, summary } = await loadFromFolder((json) => api.importBackup(json), { prompt: true })
+      setFolderMeta(meta)
+      setFolderMenuOpen(false)
+      setToastTone('ok')
+      setToast(`Loaded from folder · ${summary.plants} plants`)
+      window.setTimeout(() => window.location.reload(), 600)
+    } catch (err) {
+      setToastTone('error')
+      setToast(err instanceof Error ? err.message : 'Load from folder failed')
+    }
+  }
+
+  async function unlinkFolder() {
+    await disconnectSyncFolder()
+    setFolderMeta(getFolderSyncMeta())
+    setFolderMenuOpen(false)
+    setToastTone('ok')
+    setToast('Folder sync disconnected')
   }
 
   return (
@@ -106,6 +191,72 @@ export function Layout() {
                         e.target.value = ''
                       }}
                     />
+
+                    {canFolderSync && (
+                      <div className="relative" ref={folderMenuRef}>
+                        <button
+                          type="button"
+                          onClick={() => setFolderMenuOpen((o) => !o)}
+                          className={`border px-3 py-1.5 rounded-xl text-sm ${
+                            folderMeta.enabled
+                              ? 'bg-emerald-600 border-emerald-500 text-white'
+                              : 'bg-emerald-800 hover:bg-emerald-700 border-emerald-700 text-emerald-100'
+                          }`}
+                          title="Save and sync to a folder on this computer"
+                        >
+                          {folderMeta.enabled ? `Folder · ${folderMeta.folderName}` : 'Folder sync'}
+                        </button>
+                        {folderMenuOpen && (
+                          <div className="absolute right-0 mt-1.5 w-64 bg-white text-slate-800 border border-slate-200 rounded-xl shadow-lg p-2 z-40">
+                            <p className="text-[11px] text-slate-500 px-2 py-1 m-0">
+                              {folderMeta.enabled
+                                ? `Linked to “${folderMeta.folderName}”. Last sync: ${formatSyncTime(folderMeta.lastSyncAt)}`
+                                : 'Choose a folder to keep au-natives-garden.json in sync.'}
+                            </p>
+                            {!folderMeta.enabled ? (
+                              <button
+                                type="button"
+                                onClick={() => void linkFolder()}
+                                className="w-full text-left text-sm font-semibold px-2.5 py-2 rounded-lg hover:bg-emerald-50 text-emerald-900"
+                              >
+                                Choose folder…
+                              </button>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => void syncNow()}
+                                  className="w-full text-left text-sm font-semibold px-2.5 py-2 rounded-lg hover:bg-emerald-50 text-emerald-900"
+                                >
+                                  Sync now (save to folder)
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => void loadFolder()}
+                                  className="w-full text-left text-sm font-semibold px-2.5 py-2 rounded-lg hover:bg-slate-50"
+                                >
+                                  Load from folder
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => void linkFolder()}
+                                  className="w-full text-left text-sm px-2.5 py-2 rounded-lg hover:bg-slate-50"
+                                >
+                                  Change folder…
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => void unlinkFolder()}
+                                  className="w-full text-left text-sm px-2.5 py-2 rounded-lg hover:bg-rose-50 text-rose-700"
+                                >
+                                  Disconnect
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </>
                 )}
                 {isLocalMode ? (
@@ -151,8 +302,16 @@ export function Layout() {
         <div className="bg-amber-50 border-b border-amber-200 text-amber-950 text-sm px-4 py-2">
           <div className="max-w-7xl mx-auto flex items-start justify-between gap-3">
             <p className="m-0">
-              Local mode — data stays in this browser on this site. Use <strong className="font-semibold">Export</strong> for a backup.
-              Opening the old HTML file or a different URL won’t share the same save.
+              Local mode — browser storage on this site
+              {canFolderSync ? (
+                <>
+                  , or use <strong className="font-semibold">Folder sync</strong> to keep a file on disk.
+                </>
+              ) : (
+                <>
+                  . Use <strong className="font-semibold">Export</strong> for a backup (folder sync needs Chrome/Edge).
+                </>
+              )}
             </p>
             <button
               type="button"

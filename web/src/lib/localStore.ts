@@ -114,6 +114,11 @@ function save(db: DbShape) {
         : `Could not save locally: ${msg}`,
     )
   }
+  void import('./folderSync')
+    .then((m) => m.scheduleAutoFolderSync())
+    .catch(() => {
+      /* optional */
+    })
 }
 
 type LegacyHtmlSeed = {
